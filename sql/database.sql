@@ -52,3 +52,4 @@ CREATE TABLE Inscripciones(
 );
 
 -- DNI < Procedimientos almacenados, funciones
+
