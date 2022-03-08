@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+    mipostgresql:   # Nombre resoluble a traves de DNS para conectarme con el contenedor
+        container_name: postgresql0     # Nombre del contenedor. Útil para lanzar comandos de docker
+                                        # Arrancarlo, pararlo, ver los logs, borrarlo
+        image:  postgres:14.2
+        ports:
+            - 5432:5432
+        restart: unless-stopped     # Configurar el postgresql como un servicio con arranque automatico con la maquina
+        environment:
+            - POSTGRES_PASSWORD=password 
+            - POSTGRES_USER=usuario
+            - POSTGRES_DB=curso
+        volumes:
+            - /home/ubuntu/environment/datos/postgres:/var/lib/postgresql/data
+
+    adminer:
+        container_name: miadminer
+        image: adminer
+        restart: always
+            - 8080:8080
