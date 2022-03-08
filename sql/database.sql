@@ -53,3 +53,16 @@ CREATE TABLE Inscripciones(
 
 -- DNI < Procedimientos almacenados, funciones
 
+
+
+INSERT INTO Cursos (Titulo, Duración, Importe) 
+            VALUES ('Curso PostgreSQL', 24, 2345.8);
+            
+INSERT INTO Empresas(CIF, Nombre) 
+            VALUES ('9999999A', 'Informatica Lopez! S.L.');
+
+INSERT INTO Personas (EmpresaId ,NUMERO_DNI, LETRA_DNI, Nombre, Apellidos, Email)
+            VALUES ( lastval() ,23000,'T','Ivan','Osuna','ivan@ivan.com');
+
+INSERT INTO INSCRIPCIONES ( CursoId, PersonaId, Fecha, Aprobado)
+            VALUES ( currval('cursos_id_seq') , lastval() ,'10-10-2022',false);
