@@ -15,7 +15,7 @@ CREATE OR REPLACE FUNCTION validar_letra()
 RETURNS trigger AS 
 $$
 BEGIN
-    IF ( letra_dni(NEW.numero_id) = NEW.letra_dni ) THEN
+    IF ( letra_dni(NEW.numero_dni) <> NEW.letra_dni ) THEN
     -- En caso de que no encajen el calculado y el suministrado... EXPLOSION!!!
         RAISE EXCEPTION 'Letra de control del DNI incorrecta';
     END IF;
@@ -25,5 +25,5 @@ $$ LANGUAGE plpgsql;
 
     
 -- Trigger: EVENTOS: INSERT or UPDATE
-CREATE TRIGGER validador_letra_dni BEFORE INSERT OR UPDATE Persona
+CREATE TRIGGER validador_letra_dni BEFORE INSERT OR UPDATE ON Personas
 FOR EACH ROW EXECUTE PROCEDURE validar_letra();
