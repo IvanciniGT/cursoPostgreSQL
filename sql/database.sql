@@ -23,7 +23,7 @@ CREATE TABLE Personas(
     FOREIGN KEY (EmpresaId) REFERENCES Empresas(Id)
 );
 
---CARACTERES: 8 digitos + letra
+-- CARACTERES: 8 digitos + letra
 --    8 digitos como caracteres: .... depende de qué?  Juego de caracteres: COLATE
 --    UTF-8: Por ser un DNI: 8 bytes
 --        En UTF-8 Cuanto ocupa un carácter? De 1 a 4 bytes... Depende del caracter: A,1, ( > 1 byte
@@ -56,13 +56,59 @@ CREATE TABLE Inscripciones(
 
 
 INSERT INTO Cursos (Titulo, Duración, Importe) 
-            VALUES ('Curso PostgreSQL', 24, 2345.8);
-            
+            VALUES ('Curso PostgreSQL', 24, 2000.0);
+INSERT INTO Cursos (Titulo, Duración, Importe) 
+            VALUES ('Introducción a PostgreSQL', 20, 3000.0);
+INSERT INTO Cursos (Titulo, Duración, Importe) 
+            VALUES ('SQL: Introducción', 24, 2500.0);
+INSERT INTO Cursos (Titulo, Duración, Importe) 
+            VALUES ('PostgreSQL para expertos en Oracle', 24, 2000.0);
+INSERT INTO Cursos (Titulo, Duración, Importe) 
+            VALUES ('Oracle y su SQL', 30, 1000.0);
+INSERT INTO Cursos (Titulo, Duración, Importe) 
+            VALUES ('SQL para todos', 35, 1500.0);
+
+
 INSERT INTO Empresas(CIF, Nombre) 
-            VALUES ('9999999A', 'Informatica Lopez! S.L.');
+            VALUES ('1111111A', 'Informatica Lopez S.A.');
+INSERT INTO Empresas(CIF, Nombre) 
+            VALUES ('2222222A', 'Seguros Redriguez S.A.');
+INSERT INTO Empresas(CIF, Nombre) 
+            VALUES ('3333333A', 'Telas Manolo S.A.');
+INSERT INTO Empresas(CIF, Nombre) 
+            VALUES ('4444444A', 'Electrodomésticos Sáchez S.A.');
+INSERT INTO Empresas(CIF, Nombre) 
+            VALUES ('5555555A', 'Luis Gutierrez y asociados S.A.');
+
 
 INSERT INTO Personas (EmpresaId ,NUMERO_DNI, LETRA_DNI, Nombre, Apellidos, Email)
             VALUES ( lastval() ,23000,'T','Ivan','Osuna','ivan@ivan.com');
 
+INSERT INTO Personas (EmpresaId ,NUMERO_DNI, LETRA_DNI, Nombre, Apellidos, Email)
+            VALUES ( lastval()-1 ,23000,'T','Luis','García','ivan@ivan.com');
+
+INSERT INTO Personas (EmpresaId ,NUMERO_DNI, LETRA_DNI, Nombre, Apellidos, Email)
+            VALUES ( lastval()-2 ,23000,'T','Ruth','Núñez','ivan@ivan.com');
+
+INSERT INTO Personas (EmpresaId ,NUMERO_DNI, LETRA_DNI, Nombre, Apellidos, Email)
+            VALUES ( lastval()-2 ,23000,'T','Fernán','Esteban','ivan@ivan.com');
+
+
 INSERT INTO INSCRIPCIONES ( CursoId, PersonaId, Fecha, Aprobado)
-            VALUES ( currval('cursos_id_seq') , lastval() ,'10-10-2022',false);
+            VALUES ( currval('cursos_id_seq') , currval('personas_id_seq') ,'03-10-2022',false);
+
+INSERT INTO INSCRIPCIONES ( CursoId, PersonaId, Fecha, Aprobado)
+            VALUES ( currval('cursos_id_seq') -1, currval('personas_id_seq') -1,'03-08-2022',false);
+
+INSERT INTO INSCRIPCIONES ( CursoId, PersonaId, Fecha, Aprobado)
+            VALUES ( currval('cursos_id_seq') -1, currval('personas_id_seq')-2 ,'03-20-2022',false);
+
+INSERT INTO INSCRIPCIONES ( CursoId, PersonaId, Fecha, Aprobado)
+            VALUES ( currval('cursos_id_seq') -2, currval('personas_id_seq') -2,'03-22-2022',false);
+
+INSERT INTO INSCRIPCIONES ( CursoId, PersonaId, Fecha, Aprobado)
+            VALUES ( currval('cursos_id_seq') -2, currval('personas_id_seq') -3,'02-01-2022',true);
+
+INSERT INTO INSCRIPCIONES ( CursoId, PersonaId, Fecha, Aprobado)
+            VALUES ( currval('cursos_id_seq') -3, currval('personas_id_seq') -3,'01-10-2022',true);
+
