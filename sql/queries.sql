@@ -14,26 +14,28 @@ SELECT
 FROM
     Empresas 
     RIGHT OUTER JOIN    Personas        ON Personas.EmpresaId = Empresas.Id
-    INNER JOIN          Inscripciones   ON Personas.Id = Inscripciones.PersonasId
+    INNER JOIN          Inscripciones   ON Personas.Id = Inscripciones.PersonaId
 WHERE 
-    extract('month',Inscripciones.Fecha) = extract('month', current_date) and
-    extract('year',Inscripciones.Fecha)  = extract('year', current_date)
+    extract('month' FROM Inscripciones.Fecha) = extract('month' FROM current_date) and
+    extract('year' FROM Inscripciones.Fecha)  = extract('year' FROM current_date)
 ;
 
 ----
 
 -- Query: Listado de todos los cursos con el total de inscripciones
 --        que hay para este mes de cada uno
-
-SELECT  
-    Cursos.Titulo,
-    COUNT(*) as Inscripciones,
+SELECT 
+    Personas.Nombre,
+    Personas.Apellidos,
+    Empresas.Nombre
 FROM
-    Cursos 
-    LEFT OUTER JOIN Inscripciones ON Cursos.Id = Inscripciones.CursoId    
+    Empresas 
+    RIGHT OUTER JOIN    Personas        ON Personas.EmpresaId = Empresas.Id
+    INNER JOIN          Inscripciones   ON Personas.Id = Inscripciones.PersonaId
 WHERE 
-    extract('month',Inscripciones.Fecha) = extract('month', current_date) and
-    extract('year',Inscripciones.Fecha)  = extract('year', current_date)
+    extract('month' FROM Inscripciones.Fecha) = extract('month' FROM current_date) and
+    extract('year' FROM Inscripciones.Fecha)  = extract('year' FROM current_date)
+;
 
 
 
