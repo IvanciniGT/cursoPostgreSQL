@@ -99,7 +99,7 @@ INDICE      FILAS:
 
 
 
-1000        1
+1000        1   17      32  44  56
 
 
 1700        3
@@ -114,6 +114,8 @@ INDICE      FILAS:
 
 
 
+-----------------------
+1000        98  118
 -----------------------
 Los indices hay que estarlos regenerando de continuo.
 
