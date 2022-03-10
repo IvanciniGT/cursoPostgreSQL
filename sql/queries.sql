@@ -162,3 +162,12 @@ WHERE
                                                  extract('year' FROM current_date)
                                         ),
                                         'dd-MM-YYYY')
+                                        
+--- CALCULAR EL TAMAÑO DE FILA SEGUN ORDEN DE LOS CAMPOS
+SELECT pg_column_size(row()) as FILA_VACIA,
+       pg_column_size(row(0::SMALLINT)) as FILA_CON_SMALLINT,
+       pg_column_size(row(0::INT)) as FILA_CON_INT,
+       pg_column_size(row(0::BIGINT)) as FILA_CON_BIGINT,
+       pg_column_size(row(0::BIGINT,0::SMALLINT)) as FILA_CON_BIGINT_Y_SMALL_INT,
+       pg_column_size(row(0::BIGINT,0::BIGINT,0::SMALLINT,0::SMALLINT)) as FILA_VARIOS_CON_SMALLINT_Y_BIG_INT
+;
