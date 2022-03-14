@@ -220,3 +220,83 @@ En cada máquina solo hay una parte de los datos.
 PostgreSQL no tienen NADA para montar Activo/Activo (varios maestros) - Oracle  - RAC
                                                                         MariaDB - Galera
 
+## Parámetros de configuración IMPORTANTES de POSTGRES en producción
+
+# Memoria
+La bbdd necesita mucha memoria.... para 2 cosas:
+
+- Memoria de trabajo                ***** Limite lo impone la máquina de la que dispongo.    Depende de: La cantidad de queries
+    - Queries < Número de conexiones a la BBDD
+- Cache                             ***** Limite lo impone la máquina de la que dispongo.    Depende de: Tamaño de mi BBDD
+    - Tablas e indices
+    - Planes de ejecución
+    - Procedimientos almacenados
+    - 
+## Cuanta memoria dejo a postgreSQL para guardar datos en cache: Algo razonable sería en torno al 30-40% de la RAM de la maquina.
+shared_buffers =            # Es memoria que postgre puede y va a areservar para usarla como cache
+effective_cache_size =      # Es una estimación de cuanta memoria puede llegar a usar el SO para buffers y cache
+                            # Esto es información para el optimizador de queries... para calcular los planes de ejecución.
+                            # La recomendación es : >70%<-80% de la RAM total del sistema < Aquí va a haber paginación (swapping)
+work_mem= 4Mbs, 8Mbs
+# Memoria de trabajo Esta es la memoria máxima RAM que se permite usar para cada operación puntual que se realice
+
+Si tengo 8Mbs.... y tengo 100 conexiones: 800 Mbs... Si cada conexión hace varias cosas en paralelo... más bloques.
+# Procesos de trabajo
+
+maintenance_work_mem = 1GB 2GB
+ANALIZE
+VACCUUM
+REINDEX
+
+## Número de conexiones máximo
+max_connections = 100 # Esto está intimamente ligado con la memoria que necesito
+max_worker_processes ~ Estan condicionados por el número de CPUs de que disponga. / Ejecutores 
+max_parallel_worker_per_gather ^ 20-25%
+
+# Red, identificacion
+
+# Logs & WAL
+wal_buffers = 10-40Mb           # Problema: Si es pequeño,peor para el rendimiento
+                                            Si es muy grande y el sistema se cae entes de escribir al HDD muchos datos pierdo.
+
+100Gb BBDD entera en RAM... impensable 
+La teoria me dice que para que entre etera en RAM: 0.5 Tbs de RAM....
+-> Habrá muchas tablas... Todas las estoy usando continuamente?
+Particionado:
+Nuevos de trabajo 10% -> RAM        10Gbs + indices 
+                  90% historico... solo se consultan muy de vez en cuando.
+
+
+A lo mejor la BBDD solo es de escritura.---> ETL ---> Datawarehouse
+
+Cuando trabajais desde JAVA... cómo abris una conexión a una BBDD?
+Se trabaja con un pool de conexiones:
+
+100 solicitudes de conexión
+Si solo hay 3 conexiones posibles a BBDD en JAVA las meto en una cola
+                        -------
+                            C1
+                        -------
+                            C2
+                        -------
+                            C3
+                        -------
+Por qué?
+Y no simplemente abro más conexiones con la BBDD? En una BBDD cada conexión e un proceso a nivel de SO.
+Abrir una conexión implica: cargar un programa en RAM... y reservar RAM para ese programa, para que ponga sus datos.
+
+Tengo algún problema por tener X(menos de 32) CPUs en abrir 800.000 de conexiones? Me da igual.
+Esos programas abren hilos de ejecución, que son los que efectivamente hacen unu trabajo.
+    Y cuando quieran acceder a la CPU? No... y que se hace? Se encolan (SO de tiempo compartido)
+
+Donde está el problema en abrir muchas conexiones? RAM
+
+Memoria: Algún sitio donde poder dejar datos:
+- RAM
+- HDD ** Peor rendimiento
+
+
+
+
+Pool Tomcat  min, current, max 100
+Cada vez que tu abres una conexión, se reserva esa RAM
