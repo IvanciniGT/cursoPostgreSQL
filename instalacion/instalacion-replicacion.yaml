@@ -17,7 +17,7 @@ services:
             - /home/ubuntu/environment/datos/postgres:/var/lib/postgresql/data
             # Inyectar ficheros del host al contenedor
             - /home/ubuntu/environment/curso/instalacion/postgresql.conf:/etc/postgresql/postgresql.conf
-            - /home/ubuntu/environment/curso/instalacion/pg_hba.conf:/etc/postgresql/pg_hba.conf
+            - /home/ubuntu/environment/curso/instalacion/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
             
     replicasql:   # Nombre resoluble a traves de DNS para conectarme con el contenedor
         container_name: replica     # Nombre del contenedor. Útil para lanzar comandos de docker
@@ -35,4 +35,4 @@ services:
             - /home/ubuntu/environment/datos/backup:/var/lib/postgresql/data
             # Inyectar ficheros del host al contenedor
             - /home/ubuntu/environment/curso/instalacion/postgresql.conf:/etc/postgresql/postgresql.conf
-            - /home/ubuntu/environment/curso/instalacion/pg_hba.conf:/etc/postgresql/pg_hba.conf
+            - /home/ubuntu/environment/curso/instalacion/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
