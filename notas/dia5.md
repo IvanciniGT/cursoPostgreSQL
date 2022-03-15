@@ -300,3 +300,5 @@ Memoria: Algún sitio donde poder dejar datos:
 
 Pool Tomcat  min, current, max 100
 Cada vez que tu abres una conexión, se reserva esa RAM
+
+
