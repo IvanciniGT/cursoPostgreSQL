@@ -16,7 +16,7 @@
         max_wal_senders = 10	
         max_replication_slots = 10
         ++++ Sabiendo que los parametros de abajo de esta linea el maestro los ignora... solo los leera el esclavo
-        hot_standby = on
+        hot_standby = on                                Permitirle responder a queries de consolta
         hot_standby_feedback = on
     - hba.conf < Autorizacion para el usuario de replicacion
     - Arrancado
@@ -33,3 +33,4 @@
         - Datos... exportados a traves de WAL... que en el fichero postgresql.auto.conf le pido que restaure al arrancar.
         - postgresql.auto.conf < En ese fichero vienen los datos de conexión al maestro
         - Y viene también que ese fichero el que lo lea es un esclavo con un determnado nombre (SLOT)
+        
