@@ -40,6 +40,7 @@ CREATE TABLE Personas(
 --                    Lógica de datos? 
 --    Pregunta II: ¿Quién usa bastante PL/SQL?
 
+
 -- Inscripciones
 CREATE TABLE Inscripciones(
     CursoId     SMALLINT        NOT NULL,       -- 2
