@@ -74,3 +74,10 @@ Apple:  MacOS   SO Unix®
 
 SysV de UNIX < initScripts
 init.d rc 0-6
+
+
+
+0.0.0.0/0
+???.???.???.???
+
+127.0.0.1/32
