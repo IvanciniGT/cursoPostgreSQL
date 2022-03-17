@@ -73,6 +73,8 @@ RAID0       ----------------------------------- Esclavo
 HDD1
 HDD2
 
+RAID10
+
 ---------------------------
     
 Maestro -IP1 -VIPA-maestro  \
@@ -119,3 +121,85 @@ NIC virtualización a nivel de HW
 # Instalación KeepAlived
 sudo apt-get install keepalived -y
 sudo systemctl start keepalived
+
+# Para configurar spring:
+
+Damos de alta los 2 datasource y 
+Crear un router de datasource
+
+Copiar código de :
+https://stackoverflow.com/questions/9203122/routing-read-write-transactions-to-primary-and-read-only-transactions-to-replica
+
+
+## Backups & Restore
+
+PD_DATA: 
+    Carpeta donde están los datos de la BBDD: data_directory
+
+### Backup físico
+
+Copiando archivos a nivel de SO.
+Mucho más rápido.
+
+#### Frío . OPCION PREFERIDA CUANDO ESTA DISPONIBLE !!!
+
+cp PD_DATA MI-CARPETA-DE-BACKUPS
+    zip
+    tar 
+
+#### Caliente
+
+Es necesario que la BBDD esté en modo ArchiveLog < WAL
+
+select pg_start_backup('nombre');
+    Se dejan temporalmente de escribir cambios en los archivos de la BBDD.
+    Solo en los WAL.
+    
+cp PD_DATA MI-CARPETA-DE-BACKUPS
+    zip
+    tar 
+    rsync
+    /var/postgresql/14/main -> /mnt/backups/backupHoy (nfs, icsci)
+
+select pg_stop_backup('nombre');
+    Se dejan temporalmente de escribir cambios en los archivos de la BBDD.
+    Solo en los WAL.
+
+### Backup para replicación
+
+pg_basebackup
+    Aunque sirve también para backup normal, ahí no se usa -> cp rsync tar
+    Adicionalmente lleva utilizadades para replicación: genera información adicional para la replica: .auto y otros.
+
+#### Restauración: Recopiar la carpeta
+
+Servidor parado
+Recopio carpeta
+Arranco servidor
+
+### Backup lógico
+
+Exporto datos.
+
+Me llevo la estructura de la BBDD y los 4 datos de inicio de una app.
+
+#### Solo una tabla, database
+    - pg_dump      -U usuario BASE-DATOS
+    - pg_dump      -U usuario BASE-DATOS > backup.sql
+    - pg_dumpall   -U usuario 
+    En cualquiera de ellos: 
+        - Fp Es el por defecto... sql
+        - Ft        -f archivo.tar
+        $ pg_dump -Ft -f backup.tar -U usuario BASE-DATOS
+Restore: 
+    psql -u.... -f backup.sql
+        Funciona solo con archivos .sql
+    pg_restore -U usuario -d BASE-DE-DATOS fichero
+        Funciona tanto con archivos .sq como con archivos .tar
+        
+        
+Backups & restore
+
+1- Plan de backup confirmado con cliente.
+2- Scripts cron > Maquina externa
+3- Prueba de restore *******
